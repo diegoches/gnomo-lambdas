@@ -27,8 +27,13 @@ jobs:
 
         # Ensuring current working directory is accessible by the function--this might not be doing anything
         export PATH=$PATH:$(pwd)
-    - name: AWS Lambda Deploy
+    - name: AWS Lambda Deploy reportTenant
       uses: appleboy/lambda-action@master
       with:
         function_name: reportTenant
+        zip_file: gnomo-lambda.zip
+    - name: AWS Lambda Deploy calculateTenantScore
+      uses: appleboy/lambda-action@master
+      with:
+        function_name: calculateTenantScore
         zip_file: gnomo-lambda.zip
