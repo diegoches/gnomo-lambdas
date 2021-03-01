@@ -31,4 +31,4 @@ jobs:
       uses: appleboy/lambda-action@master
       with:
         function_name: reportTenant
-        zip_file: reportTenant.zip
+        zip_file: gnomo-lambda.zip
