@@ -1,33 +1,38 @@
 name: deploy to lambda
 on: [push]
 jobs:
-  deploy_source:
-    name: build and deploy lambda
-    strategy:
-      matrix:
-        node-version: [12.x]
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install and build
-        run: |
-          npm ci
-          npm run build --if-present
-        env:
-          CI: true
-      - name: zip
-        uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ./bundle.zip ./
-      - name: default deploy
-        uses: appleboy/lambda-action@master
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-east-2
-          function_name: reportTenant
-          zip_file: bundle.zip
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        node-version: '3.8'
+    - name: Configure AWS credentials from Production account
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: us-east-2
+        profile_name: default
+        project_name: GnomoLambdas
+        runtime: python3.8
+        s3_bucket: gnomo-lambdas
+    - name: Run a multi-line script
+      run: |
+        # Install PIP
+        python -m pip install --upgrade pip
+        # Install all dependencies as defined by requirements.txt in the current directory
+        pip3 install -r requirements.txt -t .
+        # For installing invidividual modules
+        # Zip files into current directory
+        zip -r gnomo-lambda.zip .
+
+        # Ensuring current working directory is accessible by the function--this might not be doing anything
+        export PATH=$PATH:$(pwd)
+    - name: AWS Lambda Deploy
+      uses: appleboy/lambda-action@v0.0.4
+      with:
+        function_name: reportTenant
+        zip_file: reportTenant.zip
