@@ -1,4 +1,4 @@
-name: deploy to lambda
+name: Deploy to lambda
 on: [push]
 jobs:
   build:
@@ -8,7 +8,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        node-version: '3.8'
+        python-version:: '3.8'
     - name: Configure AWS credentials from Production account
       uses: aws-actions/configure-aws-credentials@v1
       with:
