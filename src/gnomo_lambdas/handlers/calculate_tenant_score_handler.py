@@ -3,6 +3,7 @@ from random import seed, random
 
 seed(1)
 
+
 def lambda_handler(event, context):
 
     parameters = event.get('queryStringParameters', {})

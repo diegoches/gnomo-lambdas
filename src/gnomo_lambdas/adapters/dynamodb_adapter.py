@@ -10,19 +10,7 @@ class DynamoDBAdapter(object):
     def __init__(self, table_name: str, region: str = None):
         dynamodb = boto3.resource('dynamodb') \
             if region is None else boto3.resource('dynamodb', region_name=region)
-        self.dynamo_table = dynamodb.Table(table_name)
-
-    def _get_table_name(self, table_alias):
-        cfn_client = boto3.client('cloudformation')
-        try:
-            stack_exports = cfn_client.list_exports()['Exports']
-            return [export for export in stack_exports if export['Name'] == table_alias][0]['Value']
-        except IndexError as error:
-            logger.info(f'{table_alias} not found in exports list: {stack_exports}')
-            raise error
-        except Exception as error:
-            logger.info('Failed to call cfn list_exports()')
-            raise error
+        self._dynamo_table = dynamodb.Table(table_name)
 
     @staticmethod
     def _client_error_fallback(error: ClientError, message: str):
