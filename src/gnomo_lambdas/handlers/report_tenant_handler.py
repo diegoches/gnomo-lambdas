@@ -5,7 +5,7 @@ from src.gnomo_lambdas.services.tenant_service import TenantService
 def lambda_handler(event, context):
     print(event)
 
-    body = event.get('body', {})
+    body = json.loads(event.get('body', {}))
 
     doc_id = body.get('docId')
     name = body.get('name')
