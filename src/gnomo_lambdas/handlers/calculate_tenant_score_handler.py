@@ -3,7 +3,7 @@ from src.gnomo_lambdas.services.tenant_service import TenantService
 
 
 def lambda_handler(event, context):
-    print(event)
+    print('event: ', event)
 
     parameters = event.get('queryStringParameters', {})
     doc_id = parameters.get('docID', parameters.get('dni', None))

@@ -32,7 +32,7 @@ class GnomoPredictiveDataDAO(DynamoDBAdapter):
                 'ttl_date': current_date
             }
             response = self._dynamo_table.put_item(Item=item)
-            print(response)
+            print('response:', response)
             return response.get('Item', {})
         except ClientError as client_error:
             message = f'Failed to create predictive data in DynamoDB for: ' \
@@ -46,7 +46,7 @@ class GnomoPredictiveDataDAO(DynamoDBAdapter):
     def get(self, doc_id: str) -> Dict:
         try:
             response = self._dynamo_table.get_item(
-                Key={'country_model': 'PE|TENANT_DEBTOR', 'unique_id': doc_id}
+                Key={'country_model': 'PE|TENANT_DEBTOR', 'doc_id': doc_id}
             )
         except ClientError as client_error:
             message = f'Failed to get predictive data in DynamoDB for doc_id: {doc_id}'
