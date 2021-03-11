@@ -9,9 +9,10 @@ def lambda_handler(event, context):
 
     doc_id = body.get('docId')
     name = body.get('name')
+    metadata = body.get('metadata', {})
 
     service = TenantService()
-    result = service.report_tenant(doc_id, name)
+    result = service.report_tenant(doc_id, name,metadata)
 
     return {
         'statusCode': 200,

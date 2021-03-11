@@ -1,16 +1,15 @@
 import json
-from random import seed, random
-
-seed(1)
+from src.gnomo_lambdas.services.tenant_service import TenantService
 
 
 def lambda_handler(event, context):
+    print(event)
 
     parameters = event.get('queryStringParameters', {})
     doc_id = parameters.get('docID', parameters.get('dni', None))
-    score = random() if doc_id is not None else None
 
-    print(event)
+    service = TenantService()
+    score = service.get_prediction(doc_id)
 
     dummy_score = {
         'docId': doc_id,
