@@ -31,9 +31,8 @@ class GnomoPredictiveDataDAO(DynamoDBAdapter):
                 'reported_label': label,
                 'ttl_date': current_date
             }
-            response = self._dynamo_table.put_item(Item=item)
-            print('response:', response)
-            return response.get('Item', {})
+            self._dynamo_table.put_item(Item=item)
+            return item
         except ClientError as client_error:
             message = f'Failed to create predictive data in DynamoDB for: ' \
                       f'{name} with document id: {doc_id}'

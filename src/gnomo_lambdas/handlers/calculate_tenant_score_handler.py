@@ -1,5 +1,6 @@
 import json
 from src.gnomo_lambdas.services.tenant_service import TenantService
+from src.gnomo_lambdas.helpers.decimal_encoder import DecimalEncoder
 
 
 def lambda_handler(event, context):
@@ -13,10 +14,10 @@ def lambda_handler(event, context):
 
     dummy_score = {
         'docId': doc_id,
-        'score': score
+        'score': float(score)
     }
 
     return {
         'statusCode': 200,
-        'body': json.dumps(dummy_score)
+        'body': json.dumps(dummy_score,cls=DecimalEncoder)
     }
