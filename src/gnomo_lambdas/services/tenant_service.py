@@ -8,8 +8,8 @@ seed(1)
 
 class TenantService:
 
-    __reported_label_coefficient = Decimal(0.9)
-    __last_label_coefficient = Decimal(0.1)
+    __reported_label_coefficient = Decimal(0.8)
+    __last_label_coefficient = Decimal(0.2)
 
     def __init__(self, gnomo_predictive_data_dao: GnomoPredictiveDataDAO = None):
         self.gnomo_predictive_data_dao = gnomo_predictive_data_dao or GnomoPredictiveDataDAO()
@@ -31,7 +31,7 @@ class TenantService:
             if reported_label:
                 new_score = Decimal(last_score) * self.__last_label_coefficient
                 reported_score = Decimal(reported_label) * self.__reported_label_coefficient
-                return new_score * reported_score
+                return new_score + reported_score
             else:
                 return last_score
         except KeyError as e:
